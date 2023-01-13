@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Intake.h"
+#include  "Climber.h"
 #include "VoltageController.h"
 #include "DCMotor.h"
 #include <frc/XboxController.h>
@@ -9,6 +10,9 @@
 struct RobotMap {
   struct Controllers {
     frc::XboxController driver{0};
+    frc::XboxController coDriver{1};
+
+    const double deadzone = 0.15;
   };
   Controllers controllers;
 
@@ -36,4 +40,19 @@ struct RobotMap {
   };
   IntakeSystem intake;
   
+ struct climberSystem {
+  wom::MotorVoltageController climberMotor{new WPI_TalonSRX(99)};
+
+  wom::Gearbox climberGearbox {
+    &climberMotor,
+    nullptr,
+    wom::DCMotor::CIM(1).WithReduction(1)
+  };
+
+  climberConfig config {
+    climberGearbox
+  };
+ };
+climberSystem climber;
+
 };
