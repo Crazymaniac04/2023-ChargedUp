@@ -2,6 +2,7 @@
 
 #include "Gearbox.h"
 #include <frc/DigitalInput.h>
+#include <frc/DoubleSolenoid.h>
 
 #include "behaviour/HasBehaviour.h"
 
@@ -12,11 +13,7 @@
  */
 struct IntakeConfig {
   wom::Gearbox gearbox;
-  frc::DigitalInput *gearPresenceSensor;
-
-  units::volt_t intakeVoltage = 10_V;
-  units::volt_t outtakeVoltage = -7_V;
-  units::volt_t holdVoltage = 2_V;
+  frc::DoubleSolenoid *solenoid;
 };
 
 /**
@@ -29,7 +26,6 @@ struct IntakeConfig {
 enum class IntakeState {
   kIdle,
   kIntaking,
-  kFull,
   kOuttaking
 };
 

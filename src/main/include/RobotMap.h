@@ -6,6 +6,7 @@
 #include "DCMotor.h"
 #include <frc/XboxController.h>
 #include <ctre/Phoenix.h>
+#include <frc/DoubleSolenoid.h>
 
 struct RobotMap {
   struct Controllers {
@@ -22,6 +23,8 @@ struct RobotMap {
   struct IntakeSystem {
     /* Create a new Voltage Controller */
     wom::MotorVoltageController controller{new WPI_TalonSRX(10)};
+    frc::DoubleSolenoid solenoid{1, frc::PneumaticsModuleType::CTREPCM, 999,999};
+ 
     
     wom::Gearbox gearbox{
       &controller,
@@ -29,13 +32,13 @@ struct RobotMap {
       wom::DCMotor::Bag(1).WithReduction(1) /* TODO: Update this reduction */
     };
 
-    /* The beambreak sensor on Digital Channel 0 */
-    frc::DigitalInput sensor{0};
+   
+   
 
     /* Create the intake config with the given resources */
     IntakeConfig config{
       gearbox,
-      &sensor
+      &solenoid
     };
   };
   IntakeSystem intake;

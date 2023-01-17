@@ -11,23 +11,17 @@ void Intake::OnUpdate(units::second_t dt) {
   /* Depending on the state, we set a different voltage */
   switch (_state) {
   case IntakeState::kIdle:
-    voltage = 0_V;
+    _config.solenoid->Set(frc::DoubleSolenoid::kOff);
     break;
   case IntakeState::kIntaking:
-    voltage = _config.intakeVoltage;
-    /* If we have a gear, move to kFull */
-    if (_config.gearPresenceSensor->Get())
-      _state = IntakeState::kFull;
-    break;
-  case IntakeState::kFull:
-    voltage = _config.holdVoltage;
-    break;
+    _config.solenoid->Set(frc::DoubleSolenoid::kForward);
+   break;
+    
   case IntakeState::kOuttaking:
-    voltage = _config.outtakeVoltage;
-    /* If we no longer have a gear, move to kIdle */
-    if (!_config.gearPresenceSensor->Get())
-      _state = IntakeState::kIdle;
+    _config.solenoid->Set(frc::DoubleSolenoid::kReverse);
     break;
+    // _config.solenoid->Toggle();
+
   }
 
   _config.gearbox.transmission->SetVoltage(voltage);

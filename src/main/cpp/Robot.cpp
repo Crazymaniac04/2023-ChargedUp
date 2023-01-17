@@ -29,6 +29,7 @@ void Robot::TeleopPeriodic() {
     intake->SetIntaking();
   if (map.controllers.driver.GetBButton())
     intake->SetOuttaking();
+ 
 }
 
 void Robot::DisabledInit() {}
