@@ -24,12 +24,25 @@ void Robot::AutonomousPeriodic() {}
 void Robot::TeleopInit() { }
 
 void Robot::TeleopPeriodic() {
-  /* Control the intake! */
-  if (map.controllers.driver.GetAButton())
-    intake->SetIntaking();
-  if (map.controllers.driver.GetBButton())
-    intake->SetOuttaking();
- 
+
+  // Intake motor power
+  double motorPower = 0;
+  if (map.controllers.driver.GetRightTriggerAxis() > map.controllers.deadzone) {
+    motorPower = map.controllers.driver.GetRightTriggerAxis();
+  } else if (map.controllers.driver.GetLeftTriggerAxis() > map.controllers.deadzone) {
+    motorPower = -map.controllers.driver.GetLeftTriggerAxis();
+  } else {
+    motorPower = 0.0;
+  }
+
+  // Intake solenoids
+  if (map.controllers.driver.GetAButton()) {
+    intake->SetIntaking(motorPower * 12.0_V);
+  } else if (map.controllers.driver.GetBButton()) {
+    intake->SetOuttaking(motorPower * 12.0_V);
+  } else if (map.controllers.driver.GetYButton()) {
+    intake->SetStow();
+  }
 }
 
 void Robot::DisabledInit() {}

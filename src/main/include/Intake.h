@@ -13,7 +13,8 @@
  */
 struct IntakeConfig {
   wom::Gearbox gearbox;
-  frc::DoubleSolenoid *solenoid;
+  frc::DoubleSolenoid *clamp;
+  frc::DoubleSolenoid *stow;
 };
 
 /**
@@ -26,7 +27,8 @@ struct IntakeConfig {
 enum class IntakeState {
   kIdle,
   kIntaking,
-  kOuttaking
+  kOuttaking,
+  kStow
 };
 
 /**
@@ -46,11 +48,17 @@ class Intake : public behaviour::HasBehaviour {
   /**
    * Set the intake to "Intaking" mode.
    */
-  void SetIntaking();
+  void SetIntaking(units::volt_t v = 0_V);
+
   /**
    * Set the intake to "Outtaking" mode.
    */
-  void SetOuttaking();
+  void SetOuttaking(units::volt_t v = 0_V);
+
+  /**
+   * Set the intake to stowed "Intake Up"
+  */
+  void SetStow();
 
   /**
    * Get the current intake state.
@@ -59,4 +67,5 @@ class Intake : public behaviour::HasBehaviour {
  private:
   IntakeConfig _config;
   IntakeState _state = IntakeState::kIdle;
+  units::volt_t _voltage;
 };
